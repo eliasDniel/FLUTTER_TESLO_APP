@@ -81,6 +81,6 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
 
 // ! 3. IMPLEMENTAR EL ESTADO PARA CONSUMIR EN EL FRONTEND
 final loginFormProvider =
-    StateNotifierProvider<LoginFormNotifier, LoginFormState>(
+    StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(
       (ref) => LoginFormNotifier(),
     );
