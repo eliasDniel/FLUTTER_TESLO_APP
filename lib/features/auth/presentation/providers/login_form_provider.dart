@@ -1,19 +1,86 @@
-// ! 1. ESTADO DEL PROVIDER
-
+// ! 1. DEFINIR EL ESTADO DEL FORMULARIO
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_teslo_app/features/shared/shared.dart';
-class LoginFormProvider {
+import 'package:formz/formz.dart';
+
+class LoginFormState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
   final Email email;
   final Password password;
 
-  LoginFormProvider({
-    this.isPosting = false, 
-    this.isFormPosted = false, 
-    this.isValid = false, 
-    this.email = const Email.pure(), 
-    this.password = const Password.pure()
+  LoginFormState({
+    this.isPosting = false,
+    this.isFormPosted = false,
+    this.isValid = false,
+    this.email = const Email.pure(),
+    this.password = const Password.pure(),
   });
 
+  LoginFormState copyWith({
+    bool? isPosting,
+    bool? isFormPosted,
+    bool? isValid,
+    Email? email,
+    Password? password,
+  }) {
+    return LoginFormState(
+      isPosting: isPosting ?? this.isPosting,
+      isFormPosted: isFormPosted ?? this.isFormPosted,
+      isValid: isValid ?? this.isValid,
+      email: email ?? this.email,
+      password: password ?? this.password,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'LoginFormState(isPosting: $isPosting, isFormPosted: $isFormPosted, isValid: $isValid, email: $email, password: $password)';
+  }
 }
+
+// ! 2. CREAR EL ESTADO DEL FORMULARIO
+
+class LoginFormNotifier extends StateNotifier<LoginFormState> {
+  LoginFormNotifier() : super(LoginFormState());
+
+  onEmailChanged(String value) {
+    final newEmail = Email.dirty(value);
+    state = state.copyWith(
+      email: newEmail,
+      isValid: Formz.validate([newEmail, state.password]),
+    );
+  }
+
+  onPasswordChanged(String value) {
+    final newPassword = Password.dirty(value);
+    state = state.copyWith(
+      password: newPassword,
+      isValid: Formz.validate([newPassword, state.email]),
+    );
+  }
+
+  onSubmit() {
+    _touchEveryField();
+    if (!state.isValid) return;
+    print(state);
+  }
+
+  _touchEveryField() {
+    final email = Email.dirty(state.email.value);
+    final password = Password.dirty(state.password.value);
+    state = state.copyWith(
+      isFormPosted: true,
+      email: email,
+      password: password,
+      isValid: Formz.validate([email, password]),
+    );
+  }
+}
+
+// ! 3. IMPLEMENTAR EL ESTADO PARA CONSUMIR EN EL FRONTEND
+final loginFormProvider =
+    StateNotifierProvider<LoginFormNotifier, LoginFormState>(
+      (ref) => LoginFormNotifier(),
+    );
