@@ -3,6 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_teslo_app/features/shared/shared.dart';
 import 'package:formz/formz.dart';
 
+
+// ! 3. IMPLEMENTAR EL ESTADO PARA CONSUMIR EN EL FRONTEND
+final loginFormProvider =
+    StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(
+      (ref) => LoginFormNotifier(),
+    );
+
+
 class LoginFormState {
   final bool isPosting;
   final bool isFormPosted;
@@ -78,9 +86,3 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     );
   }
 }
-
-// ! 3. IMPLEMENTAR EL ESTADO PARA CONSUMIR EN EL FRONTEND
-final loginFormProvider =
-    StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(
-      (ref) => LoginFormNotifier(),
-    );
