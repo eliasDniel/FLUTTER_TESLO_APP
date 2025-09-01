@@ -10,13 +10,38 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
 
-  AuthNotifier({
-    required this.authRepository
-  }) : super(AuthState());
+  AuthNotifier({required this.authRepository}) : super(AuthState());
 
-  void loginUser(String email, String password) async {}
+  void loginUser(String email, String password) async {
+    try {
+      final user = await authRepository.login(email, password);
+      _setLoggedUser(user);
+    } on WrongCredentials {
+      logoutUser('Credenciales incorrectas');
+    } catch (e) {
+      logoutUser('Error no controlado');
+    }
+  }
+
   void registerUser(String email, String password, String fullname) async {}
   void checkAuthStatus() async {}
+
+  void _setLoggedUser(User user) {
+    state = state.copyWith(
+      authStatus: AuthStatus.authenticated,
+      user: user,
+      // errorMessage: '',
+    );
+  }
+
+  Future<void> logoutUser([String? errorMessage]) async {
+    // Limpiar token
+    state = state.copyWith(
+      authStatus: AuthStatus.unauthenticated,
+      user: null,
+      errorMessage: errorMessage,
+    );
+  }
 }
 
 enum AuthStatus { authenticated, unauthenticated, checking }
