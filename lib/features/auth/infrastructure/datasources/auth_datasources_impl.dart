@@ -16,11 +16,15 @@ class AuthDatasourcesImpl implements AuthDataSources {
       final loginResponse = LoginResponse.fromJson(response.data);
       return UserMapper.userJsonToEntity(loginResponse);
     } on DioError catch (e) {
-      if (e.type == DioErrorType.connectionTimeout) throw ConnectionTimeout();
-      if (e.response?.statusCode == 401) throw WrongCredentials();
-      throw CustomError('Unknown error', e.response?.statusCode ?? 500);
+      if (e.type == DioErrorType.connectionTimeout) {
+        throw CustomError('Revisar conexión');
+      }
+      if (e.response?.statusCode == 401){
+        throw CustomError(e.response?.data['message'] ?? 'Credenciales invalidas');
+      }
+      throw Exception();
     } catch (e) {
-      throw CustomError('Unknown error', 500);
+      throw Exception();
     }
   }
 
