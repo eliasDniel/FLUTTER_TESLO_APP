@@ -58,7 +58,31 @@ class AuthDatasourcesImpl implements AuthDataSources {
   }
 
   @override
-  Future<User> checkStatus(String token) {
-    throw UnimplementedError();
+  Future<User> checkStatus(String token) async{
+
+   try {
+     final response = await dio.get(
+      '/auth/check-status',
+      options: Options(
+        headers: {'Authorization': 'Bearer $token'},
+      ),  
+    );
+    final loginResponse = LoginResponse.fromJson(response.data);
+    final user = UserMapper.userJsonToEntity(loginResponse);
+    return user;
+   } on DioError catch (e) {
+      if (e.type == DioErrorType.connectionTimeout) {
+        throw CustomError('Revisar conexión');
+      }
+      if (e.response?.statusCode == 401) {
+        throw CustomError(
+          e.response?.data['message'] ?? 'Token no valido',
+        );
+      }
+      throw CustomError('Error en el servidor');
+    } catch (e) {
+      throw Exception();
+    }
+   
   }
 }
