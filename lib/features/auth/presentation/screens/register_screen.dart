@@ -154,12 +154,12 @@ class _RegisterForm extends ConsumerWidget {
                   showSnackbar(context, 'Las contraseñas no coinciden');
                   return;
                 }
-                 await ref.read(registerFormProvider.notifier).onSubmit();
-                // if (context.canPop()) {
-                //   context.pop();
-                // } else {
-                //   context.go('/login');
-                // }
+                ref.read(registerFormProvider.notifier).onSubmit();
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/login');
+                }
               },
             ),
           ),
