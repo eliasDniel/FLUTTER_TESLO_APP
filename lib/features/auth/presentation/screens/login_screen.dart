@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_teslo_app/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/shared.dart';
+import '../providers/auth_state_provider.dart';
 import '../providers/login_form_provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -87,7 +87,7 @@ class _LoginForm extends ConsumerWidget {
             label: 'Correo',
             keyboardType: TextInputType.emailAddress,
             onChanged: ref.read(loginFormProvider.notifier).onEmailChanged,
-            errorMessage: loginFormState.isPosting
+            errorMessage: loginFormState.isFormPosted
                 ? loginFormState.email.errorMessage
                 : null,
           ),
@@ -97,7 +97,7 @@ class _LoginForm extends ConsumerWidget {
             label: 'Contraseña',
             obscureText: true,
             onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
-            errorMessage: loginFormState.isPosting
+            errorMessage: loginFormState.isFormPosted
                 ? loginFormState.password.errorMessage
                 : null,
           ),

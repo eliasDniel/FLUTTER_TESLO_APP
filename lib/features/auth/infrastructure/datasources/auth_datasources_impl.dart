@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_teslo_app/config/config.dart';
+import 'package:flutter_teslo_app/features/auth/infrastructure/models/register_response.dart';
 
 import '../../domain/domain.dart';
 import '../infrastructure.dart';
@@ -14,13 +15,16 @@ class AuthDatasourcesImpl implements AuthDataSources {
         data: {'email': email, 'password': password},
       );
       final loginResponse = LoginResponse.fromJson(response.data);
-      return UserMapper.userJsonToEntity(loginResponse);
+      final user = UserMapper.userJsonToEntity(loginResponse);
+      return user;
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
         throw CustomError('Revisar conexión');
       }
-      if (e.response?.statusCode == 401){
-        throw CustomError(e.response?.data['message'] ?? 'Credenciales invalidas');
+      if (e.response?.statusCode == 401) {
+        throw CustomError(
+          e.response?.data['message'] ?? 'Credenciales invalidas',
+        );
       }
       throw Exception();
     } catch (e) {
@@ -29,14 +33,32 @@ class AuthDatasourcesImpl implements AuthDataSources {
   }
 
   @override
-  Future<User> register(String email, String password, String fullname) {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<User> register(String email, String password, String fullname) async {
+    try {
+      final response = await dio.post(
+        '/auth/register',
+        data: {'fullName': fullname, 'email': email, 'password': password},
+      );
+      final loginResponse = RegisterResponse.fromJson(response.data);
+      final user = UserMapper.userRegisterToEntity(loginResponse);
+      return user;
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.connectionTimeout) {
+        throw CustomError('Revisar conexión');
+      }
+      if (e.response?.statusCode == 400) {
+        throw CustomError(
+          'Correo ya registrado',
+        );
+      }
+      throw CustomError('Error en el servidor');
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override
   Future<User> checkStatus(String token) {
-    // TODO: implement checkStatus
     throw UnimplementedError();
   }
 }
