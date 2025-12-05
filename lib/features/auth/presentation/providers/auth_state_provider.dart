@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_teslo_app/features/auth/domain/domain.dart';
 import 'package:flutter_teslo_app/features/auth/infrastructure/infrastructure.dart';
-import 'package:flutter_teslo_app/features/shared/infrastructure/services/key_value_storage_service.dart';
-import 'package:flutter_teslo_app/features/shared/infrastructure/services/key_value_storage_service_impl.dart';
+import '../../../shared/shared.dart';
+
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
@@ -73,14 +73,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logoutUser([String? errorMessage]) async {
     await keyValueStorageService.remove('token');
     state = state.copyWith(
-      authStatus: AuthStatus.unauthenticated,
+      authStatus: AuthStatus.notAuthenticated,
       user: null,
       errorMessage: errorMessage,
     );
   }
 }
 
-enum AuthStatus { authenticated, unauthenticated, checking }
+enum AuthStatus { authenticated, notAuthenticated, checking }
 
 class AuthState {
   final AuthStatus authStatus;

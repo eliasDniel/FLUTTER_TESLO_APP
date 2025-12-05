@@ -1,28 +1,46 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../features/auth/auth.dart';
+import '../../features/auth/presentation/providers/providers.dart';
+import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/products/products.dart';
+import 'routes.dart';
 
 
-final appRouter = GoRouter(
-  initialLocation: '/login',
-  routes: [
+final goRouterProvider = Provider((ref) {
+  final goRouterNotifier = ref.read(goRouterNotifierProvider);
+  return GoRouter(
+    initialLocation: '/login',
+    refreshListenable: goRouterNotifier,
+    routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const CheckStatusScreen(),
+      ),
 
-    ///* Auth Routes
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: '/register',
-      builder: (context, state) => const RegisterScreen(),
-    ),
+      ///* Auth Routes
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
 
-    ///* Product Routes
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const ProductsScreen(),
-    ),
-  ],
-  ///! TODO: Bloquear si no se está autenticado de alguna manera
-);
+      ///* Product Routes
+      GoRoute(path: '/', builder: (context, state) => const ProductsScreen()),
+    ],
+
+    redirect: (context, state) {
+      final isGoinTo = state.subloc;
+      final authStatus = goRouterNotifier.authStatus;
+      if (isGoinTo == '/splash' && authStatus == AuthStatus.checking)return null;
+      if (authStatus == AuthStatus.notAuthenticated) {
+        if (isGoinTo == '/login' || isGoinTo == '/register') return null;
+        return '/login';
+      }
+
+      if (authStatus == AuthStatus.authenticated) {
+        if (isGoinTo == '/login' || isGoinTo == '/register' || isGoinTo == '/splash') return '/';
+      }
+      return null;
+    },
+  );
+});
