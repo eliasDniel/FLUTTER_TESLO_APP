@@ -54,7 +54,7 @@ class RegisterScreen extends StatelessWidget {
 
                 Container(
                   height:
-                      size.height -235, // 80 los dos sizebox y 100 el ícono
+                      size.height - 235, // 80 los dos sizebox y 100 el ícono
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: scaffoldBackgroundColor,
@@ -104,7 +104,9 @@ class _RegisterForm extends ConsumerWidget {
           CustomTextFormField(
             label: 'Nombre completo',
             keyboardType: TextInputType.emailAddress,
-            onChanged: ref.read(registerFormProvider.notifier).onFullNameChanged,
+            onChanged: ref
+                .read(registerFormProvider.notifier)
+                .onFullNameChanged,
             errorMessage: registerFormState.isFormPosted
                 ? registerFormState.fullName.errorMessage
                 : null,
@@ -124,7 +126,9 @@ class _RegisterForm extends ConsumerWidget {
           CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
-            onChanged: ref.read(registerFormProvider.notifier).onPasswordChanged,
+            onChanged: ref
+                .read(registerFormProvider.notifier)
+                .onPasswordChanged,
             errorMessage: registerFormState.isFormPosted
                 ? registerFormState.password.errorMessage
                 : null,
@@ -134,7 +138,9 @@ class _RegisterForm extends ConsumerWidget {
           CustomTextFormField(
             label: 'Repita la contraseña',
             obscureText: true,
-            onChanged: ref.read(registerFormProvider.notifier).onConfirmPasswordChanged,
+            onChanged: ref
+                .read(registerFormProvider.notifier)
+                .onConfirmPasswordChanged,
             errorMessage: registerFormState.isFormPosted
                 ? registerFormState.confirmPassword.errorMessage
                 : null,
@@ -148,19 +154,19 @@ class _RegisterForm extends ConsumerWidget {
             child: CustomFilledButton(
               text: 'Crear cuenta',
               buttonColor: Colors.black,
-              onPressed: () async{
-
-                 if (registerFormState.password.value != registerFormState.confirmPassword.value) {
-                  showSnackbar(context, 'Las contraseñas no coinciden');
-                  return;
-                }
-                ref.read(registerFormProvider.notifier).onSubmit();
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.go('/login');
-                }
-              },
+              onPressed: !registerFormState.isPosting
+                  ? () {
+                      if (registerFormState.password.value !=
+                          registerFormState.confirmPassword.value) {
+                        showSnackbar(context, 'Las contraseñas no coinciden');
+                        return;
+                      }
+                      ref.read(registerFormProvider.notifier).onSubmit();
+                      // if (context.mounted) {
+                      //   context.go('/login');
+                      // }
+                    }
+                  : null,
             ),
           ),
 

@@ -120,11 +120,13 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   onSubmit() async {
     _touchAllFields();
     if (!state.isValid) return;
+    state = state.copyWith(isPosting: true);
     await registerFormCallback(
       state.email.value,
       state.password.value,
       state.fullName.value,
     );
+    state = state.copyWith(isPosting: false);
   }
 
   _touchAllFields() {

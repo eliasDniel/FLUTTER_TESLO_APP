@@ -3,7 +3,6 @@ import 'package:flutter_teslo_app/features/auth/domain/domain.dart';
 import 'package:flutter_teslo_app/features/auth/infrastructure/infrastructure.dart';
 import '../../../shared/shared.dart';
 
-
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
   final keyValueStorageService = KeyValueStorageServiceImpl();
@@ -19,7 +18,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier({
     required this.authRepository,
     required this.keyValueStorageService,
-  }) : super(AuthState()){
+  }) : super(AuthState()) {
     checkAuthStatus();
   }
 
@@ -39,7 +38,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       final user = await authRepository.register(email, password, fullname);
-      await authRepository.register(email, password, fullname);
+      // await authRepository.register(email, password, fullname);
       _setLoggedUser(user);
     } on CustomError catch (e) {
       logoutUser(e.message);

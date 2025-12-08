@@ -39,8 +39,8 @@ class AuthDatasourcesImpl implements AuthDataSources {
         '/auth/register',
         data: {'fullName': fullname, 'email': email, 'password': password},
       );
-      final loginResponse = RegisterResponse.fromJson(response.data);
-      final user = UserMapper.userRegisterToEntity(loginResponse);
+      final registerResponse = RegisterResponse.fromJson(response.data);
+      final user = UserMapper.userRegisterToEntity(registerResponse);
       return user;
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
