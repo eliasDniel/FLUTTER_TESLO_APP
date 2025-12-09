@@ -88,10 +88,10 @@ class _RegisterForm extends ConsumerWidget {
     final registerFormState = ref.watch(registerFormProvider);
 
     final textStyles = Theme.of(context).textTheme;
-    // ref.listen(authProvider, (previous, next) {
-    //   if (next.errorMessage.isEmpty) return;
-    //   showSnackbar(context, next.errorMessage);
-    // });
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+      showSnackbar(context, next.errorMessage);
+    });
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
