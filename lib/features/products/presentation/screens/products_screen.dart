@@ -17,16 +17,10 @@ class ProductsScreen extends StatelessWidget {
       drawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
         title: const Text('Products'),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
-        ],
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded))],
       ),
       body: const _ProductsView(),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Nuevo producto'),
-        icon: const Icon(Icons.add),
-        onPressed: () {},
-      ),
+      floatingActionButton: FloatingActionButton.extended(label: const Text('Nuevo producto'), icon: const Icon(Icons.add), onPressed: () {}),
     );
   }
 }
@@ -43,10 +37,8 @@ class _ProductsViewState extends ConsumerState<_ProductsView> {
   @override
   void initState() {
     super.initState();
-    // ref.read(productsProvider.notifier).loadNextPage();
     scrollController.addListener(() {
-      if ((scrollController.position.pixels + 400) >=
-          scrollController.position.maxScrollExtent) {
+      if ((scrollController.position.pixels + 400) >= scrollController.position.maxScrollExtent) {
         ref.read(productsProvider.notifier).loadNextPage();
       }
     });
@@ -77,7 +69,8 @@ class _ProductsViewState extends ConsumerState<_ProductsView> {
               // Navigate to product details
               context.push('/product/${product.id}');
             },
-            child: ProductCard(product: product));
+            child: ProductCard(product: product),
+          );
         },
       ),
     );
