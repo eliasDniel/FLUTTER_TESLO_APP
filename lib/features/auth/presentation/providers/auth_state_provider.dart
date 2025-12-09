@@ -6,19 +6,13 @@ import '../../../shared/shared.dart';
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
   final keyValueStorageService = KeyValueStorageServiceImpl();
-  return AuthNotifier(
-    authRepository: authRepository,
-    keyValueStorageService: keyValueStorageService,
-  );
+  return AuthNotifier(authRepository: authRepository, keyValueStorageService: keyValueStorageService);
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
   final KeyValueStorageService keyValueStorageService;
-  AuthNotifier({
-    required this.authRepository,
-    required this.keyValueStorageService,
-  }) : super(AuthState()) {
+  AuthNotifier({required this.authRepository, required this.keyValueStorageService}) : super(AuthState()) {
     checkAuthStatus();
   }
 
@@ -38,7 +32,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       final user = await authRepository.register(email, password, fullname);
-      // await authRepository.register(email, password, fullname);
       _setLoggedUser(user);
     } on CustomError catch (e) {
       logoutUser(e.message);
@@ -62,20 +55,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void _setLoggedUser(User user) async {
     await keyValueStorageService.setKeyValue<String>('token', user.token);
-    state = state.copyWith(
-      authStatus: AuthStatus.authenticated,
-      user: user,
-      errorMessage: null,
-    );
+    state = state.copyWith(authStatus: AuthStatus.authenticated, user: user, errorMessage: null);
   }
 
   Future<void> logoutUser([String? errorMessage]) async {
     await keyValueStorageService.remove('token');
-    state = state.copyWith(
-      authStatus: AuthStatus.notAuthenticated,
-      user: null,
-      errorMessage: errorMessage,
-    );
+    state = state.copyWith(authStatus: AuthStatus.notAuthenticated, user: null, errorMessage: errorMessage);
   }
 }
 
@@ -86,19 +71,8 @@ class AuthState {
   final User? user;
   final String errorMessage;
 
-  AuthState({
-    this.authStatus = AuthStatus.checking,
-    this.user,
-    this.errorMessage = '',
-  });
+  AuthState({this.authStatus = AuthStatus.checking, this.user, this.errorMessage = ''});
 
-  AuthState copyWith({
-    AuthStatus? authStatus,
-    User? user,
-    String? errorMessage,
-  }) => AuthState(
-    authStatus: authStatus ?? this.authStatus,
-    user: user ?? this.user,
-    errorMessage: errorMessage ?? this.errorMessage,
-  );
+  AuthState copyWith({AuthStatus? authStatus, User? user, String? errorMessage}) =>
+      AuthState(authStatus: authStatus ?? this.authStatus, user: user ?? this.user, errorMessage: errorMessage ?? this.errorMessage);
 }

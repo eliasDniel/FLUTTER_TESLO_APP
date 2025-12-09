@@ -17,7 +17,9 @@ class ProductsScreen extends StatelessWidget {
       drawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
         title: const Text('Products'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded))],
+        actions: [IconButton(onPressed: () {
+          
+        }, icon: const Icon(Icons.shopping_cart_outlined)),IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded))],
       ),
       body: const _ProductsView(),
       floatingActionButton: FloatingActionButton.extended(label: const Text('Nuevo producto'), icon: const Icon(Icons.add), onPressed: () {}),
