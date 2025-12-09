@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_teslo_app/config/config.dart';
-import 'package:flutter_teslo_app/features/auth/infrastructure/models/register_response.dart';
-
 import '../../domain/domain.dart';
 import '../infrastructure.dart';
 
@@ -14,8 +12,7 @@ class AuthDatasourcesImpl implements AuthDataSources {
         '/auth/login',
         data: {'email': email, 'password': password},
       );
-      final loginResponse = LoginResponse.fromJson(response.data);
-      final user = UserMapper.userJsonToEntity(loginResponse);
+      final user = UserMapper.userJsonToEntity(response.data);
       return user;
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
@@ -39,8 +36,7 @@ class AuthDatasourcesImpl implements AuthDataSources {
         '/auth/register',
         data: {'fullName': fullname, 'email': email, 'password': password},
       );
-      final registerResponse = RegisterResponse.fromJson(response.data);
-      final user = UserMapper.userRegisterToEntity(registerResponse);
+      final user = UserMapper.userRegisterToEntity(response.data);
       return user;
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
@@ -67,8 +63,7 @@ class AuthDatasourcesImpl implements AuthDataSources {
         headers: {'Authorization': 'Bearer $token'},
       ),  
     );
-    final loginResponse = LoginResponse.fromJson(response.data);
-    final user = UserMapper.userJsonToEntity(loginResponse);
+    final user = UserMapper.userJsonToEntity(response.data);
     return user;
    } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
