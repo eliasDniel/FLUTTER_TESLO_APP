@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../shared/shared.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
@@ -71,7 +72,12 @@ class _ProductsViewState extends ConsumerState<_ProductsView> {
         itemCount: productsState.products.length,
         itemBuilder: (context, index) {
           final product = productsState.products[index];
-          return ProductCard(product: product);
+          return GestureDetector(
+            onTap: () {
+              // Navigate to product details
+              context.push('/product/${product.id}');
+            },
+            child: ProductCard(product: product));
         },
       ),
     );

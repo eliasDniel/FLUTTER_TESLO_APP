@@ -5,11 +5,10 @@ import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/products/products.dart';
 import 'routes.dart';
 
-
 final goRouterProvider = Provider((ref) {
   final goRouterNotifier = ref.read(goRouterNotifierProvider);
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     refreshListenable: goRouterNotifier,
     routes: [
       GoRoute(
@@ -25,20 +24,39 @@ final goRouterProvider = Provider((ref) {
       ),
 
       ///* Product Routes
-      GoRoute(path: '/', builder: (context, state) => const ProductsScreen()),
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const ProductsScreen(),
+        routes: [
+          GoRoute(
+            path: 'product/:productId',
+            builder: (context, state) {
+              final productId = state.params['productId'] ?? '';
+              return ProductScreen(productId: productId);
+            },
+          ),
+        ],
+      ),
     ],
 
     redirect: (context, state) {
       final isGoinTo = state.subloc;
       final authStatus = goRouterNotifier.authStatus;
-      if (isGoinTo == '/splash' && authStatus == AuthStatus.checking)return null;
+      if (isGoinTo == '/splash' && authStatus == AuthStatus.checking) {
+        return null;
+      }
+
       if (authStatus == AuthStatus.notAuthenticated) {
         if (isGoinTo == '/login' || isGoinTo == '/register') return null;
         return '/login';
       }
 
       if (authStatus == AuthStatus.authenticated) {
-        if (isGoinTo == '/login' || isGoinTo == '/register' || isGoinTo == '/splash') return '/';
+        if (isGoinTo == '/login' ||
+            isGoinTo == '/register' ||
+            isGoinTo == '/splash') {
+          return '/';
+        }
       }
       return null;
     },
