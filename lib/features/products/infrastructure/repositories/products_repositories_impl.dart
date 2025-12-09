@@ -7,7 +7,7 @@ import 'package:flutter_teslo_app/features/products/domain/datasources/products_
 import 'package:flutter_teslo_app/features/products/domain/entities/product.dart';
 import 'package:flutter_teslo_app/features/products/domain/repositories/products_repositories.dart';
 
-class ProductsRepositoriesImpl extends ProductsRepositories{
+class ProductsRepositoriesImpl extends ProductsRepository{
   final ProductsDatasource productsDatasource;
   ProductsRepositoriesImpl(this.productsDatasource);
 

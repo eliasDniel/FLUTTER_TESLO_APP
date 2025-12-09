@@ -9,7 +9,7 @@ import 'routes.dart';
 final goRouterProvider = Provider((ref) {
   final goRouterNotifier = ref.read(goRouterNotifierProvider);
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/',
     refreshListenable: goRouterNotifier,
     routes: [
       GoRoute(

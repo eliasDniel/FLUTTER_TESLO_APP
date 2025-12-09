@@ -33,8 +33,7 @@ class ProductDatasourcesImpl extends ProductsDatasource {
     int limit = 10,
   }) async {
     final response = await dio.get<List>(
-      '/api/products?limit=$limit&offset=$offset',
-      queryParameters: {'offset': offset, 'limit': limit},
+      '/products?limit=$limit&offset=$offset',
     );
 
     final List<Product> products = [];
