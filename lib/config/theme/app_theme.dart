@@ -14,11 +14,11 @@ class AppTheme {
 
     ///* Texts
     textTheme: TextTheme(
-      titleLarge: GoogleFonts.montserratAlternates()
+      titleLarge: GoogleFonts.aBeeZee()
         .copyWith( fontSize: 40, fontWeight: FontWeight.bold ),
-      titleMedium: GoogleFonts.montserratAlternates()
+      titleMedium: GoogleFonts.aBeeZee()
         .copyWith( fontSize: 30, fontWeight: FontWeight.bold ),
-      titleSmall: GoogleFonts.montserratAlternates()
+      titleSmall: GoogleFonts.aBeeZee()
         .copyWith( fontSize: 20 )
     ),
 
@@ -30,7 +30,7 @@ class AppTheme {
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
         textStyle: MaterialStatePropertyAll(
-          GoogleFonts.montserratAlternates()
+          GoogleFonts.aBeeZee()
             .copyWith(fontWeight: FontWeight.w700)
           )
       )
@@ -39,7 +39,7 @@ class AppTheme {
     ///* AppBar
     appBarTheme: AppBarTheme(
       color: scaffoldBackgroundColor,
-      titleTextStyle: GoogleFonts.montserratAlternates()
+      titleTextStyle: GoogleFonts.aBeeZee()
         .copyWith( fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black ),
     )
   );

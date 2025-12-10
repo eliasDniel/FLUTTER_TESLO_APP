@@ -4,18 +4,15 @@ import 'package:flutter_teslo_app/features/products/presentation/providers/provi
 import '../../domain/repositories/products_repositories.dart';
 
 //* Provider que maneja el estado de los productos
-final productsProvider = StateNotifierProvider<ProductsNotifier, ProductsState>(
-  (ref) {
-    final productsRepository = ref.watch(productsRepositoryProviders);
-    return ProductsNotifier(productsRepository: productsRepository);
-  },
-);
+final productsProvider = StateNotifierProvider<ProductsNotifier, ProductsState>((ref) {
+  final productsRepository = ref.watch(productsRepositoryProviders);
+  return ProductsNotifier(productsRepository: productsRepository);
+});
 
 //* Notifier que maneja el estado de los productos
 class ProductsNotifier extends StateNotifier<ProductsState> {
   final ProductsRepository productsRepository;
-  ProductsNotifier({required this.productsRepository})
-    : super(ProductsState()) {
+  ProductsNotifier({required this.productsRepository}) : super(ProductsState()) {
     loadNextPage();
   }
 
@@ -23,22 +20,14 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
   Future loadNextPage() async {
     if (state.isLoading || state.isLastPage) return;
     state = state.copyWith(isLoading: true);
-    final products = await productsRepository.getProductsByPage(
-      limit: state.limit,
-      offset: state.offset,
-    );
+    final products = await productsRepository.getProductsByPage(limit: state.limit, offset: state.offset);
 
     if (products.isEmpty) {
       state = state.copyWith(isLastPage: true, isLoading: false);
       return;
     }
 
-    state = state.copyWith(
-      isLastPage: false,
-      isLoading: false,
-      offset: state.offset + state.limit,
-      products: [...state.products, ...products],
-    );
+    state = state.copyWith(isLastPage: false, isLoading: false, offset: state.offset + state.limit, products: [...state.products, ...products]);
   }
 }
 
@@ -50,21 +39,9 @@ class ProductsState {
   final bool isLoading;
   final List<Product> products;
 
-  ProductsState({
-    this.isLastPage = false,
-    this.limit = 10,
-    this.offset = 0,
-    this.isLoading = false,
-    this.products = const [],
-  });
+  ProductsState({this.isLastPage = false, this.limit = 10, this.offset = 0, this.isLoading = false, this.products = const []});
 
-  ProductsState copyWith({
-    bool? isLastPage,
-    int? limit,
-    int? offset,
-    bool? isLoading,
-    List<Product>? products,
-  }) {
+  ProductsState copyWith({bool? isLastPage, int? limit, int? offset, bool? isLoading, List<Product>? products}) {
     return ProductsState(
       isLastPage: isLastPage ?? this.isLastPage,
       limit: limit ?? this.limit,

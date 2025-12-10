@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_teslo_app/features/shopping/presentation/shopping_car_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/providers.dart';
 import '../../features/auth/presentation/screens/screens.dart';
@@ -35,6 +36,12 @@ final goRouterProvider = Provider((ref) {
               return ProductScreen(productId: productId);
             },
           ),
+          GoRoute(
+            path: 'shopping-cart',
+            builder: (context, state) {
+              return const ShoppingCarScreen();
+            },
+          )
         ],
       ),
     ],

@@ -8,13 +8,7 @@ import '../infrastructure.dart';
 class ProductDatasourcesImpl extends ProductsDatasource {
   late final Dio dio;
   final String accessToken;
-  ProductDatasourcesImpl({required this.accessToken})
-    : dio = Dio(
-        BaseOptions(
-          baseUrl: Enviroment.apiUrl,
-          headers: {'Authorization': 'Bearer $accessToken'},
-        ),
-      );
+  ProductDatasourcesImpl({required this.accessToken}) : dio = Dio(BaseOptions(baseUrl: Enviroment.apiUrl, headers: {'Authorization': 'Bearer $accessToken'}));
 
   @override
   Future<Product> createUpdateProduct(Map<String, dynamic> productLike) {
@@ -39,13 +33,8 @@ class ProductDatasourcesImpl extends ProductsDatasource {
   }
 
   @override
-  Future<List<Product>> getProductsByPage({
-    int offset = 0,
-    int limit = 10,
-  }) async {
-    final response = await dio.get<List>(
-      '/products?limit=$limit&offset=$offset',
-    );
+  Future<List<Product>> getProductsByPage({int offset = 0, int limit = 10}) async {
+    final response = await dio.get<List>('/products?limit=$limit&offset=$offset');
 
     final List<Product> products = [];
     for (var element in response.data ?? []) {
