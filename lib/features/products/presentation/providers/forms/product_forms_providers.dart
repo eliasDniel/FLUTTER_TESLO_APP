@@ -1,22 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_teslo_app/config/constants/enviroment.dart';
 import 'package:flutter_teslo_app/features/products/domain/entities/product.dart';
+import 'package:flutter_teslo_app/features/products/products.dart';
 import 'package:formz/formz.dart';
 import '../../../../shared/infrastructure/infrastruture.dart';
 
-
 //* PROVIDER DEL FORMULARIO DE PRODUCTO */
 final productFormProvider = StateNotifierProvider.autoDispose
-    .family<ProductFormNotifier, ProductFormState, Product>(
-      (ref, product) {
+    .family<ProductFormNotifier, ProductFormState, Product>((ref, product) {
+      final createUpdateCallBack = ref
+          .watch(productsProvider.notifier)
+          .createUpdateProduct;
 
-        return ProductFormNotifier(product: product, onSubmit: (productLike) => null,);
-      },
-    );
+      return ProductFormNotifier(
+        product: product,
+        onSubmit: createUpdateCallBack,
+      );
+    });
 
 //* NOTIFIER DEL FORMULARIO DE PRODUCTO
 class ProductFormNotifier extends StateNotifier<ProductFormState> {
-  final void Function(Map<String, dynamic> productLike)? onSubmit;
+  final Future<bool> Function(Map<String, dynamic> productLike)? onSubmit;
   ProductFormNotifier({this.onSubmit, required Product product})
     : super(
         ProductFormState(
@@ -40,7 +44,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
     if (onSubmit == null) return false;
 
     final productLike = <String, dynamic>{
-      'id': state.id,
+      'id': (state.id == 'new') ? null : state.id,
       'title': state.title.value,
       'slug': state.slug.value,
       'price': state.price.value,
@@ -56,8 +60,12 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
           )
           .toList(),
     };
-    return true;
-    //TODO: await onSubmit!(productLike);
+
+    try {
+      return await onSubmit!(productLike);
+    } catch (e) {
+      return false;
+    }
   }
 
   void _toogleEverythingIsValid() {

@@ -20,6 +20,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.keyValueStorageService,
   }) : super(AuthState()) {
     checkAuthStatus();
+    if (state.authStatus == AuthStatus.authenticated) {
+      state = state.copyWith(errorMessage: null);
+    }
   }
 
   void loginUser(String email, String password) async {
@@ -75,6 +78,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       user: null,
       errorMessage: errorMessage,
     );
+
+    print(state);
   }
 }
 
