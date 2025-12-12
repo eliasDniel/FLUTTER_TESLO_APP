@@ -1,5 +1,6 @@
 // ! 1. DEFINIR EL ESTADO DEL FORMULARIO
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_teslo_app/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:flutter_teslo_app/features/shared/shared.dart';
 import 'package:formz/formz.dart';

@@ -1,4 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_teslo_app/features/products/domain/entities/product.dart';
 import 'package:flutter_teslo_app/features/products/presentation/providers/providers.dart';
 import '../../domain/repositories/products_repositories.dart';

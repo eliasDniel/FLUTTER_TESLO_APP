@@ -32,7 +32,7 @@ final goRouterProvider = Provider((ref) {
           GoRoute(
             path: 'product/:productId',
             builder: (context, state) {
-              final productId = state.params['productId'] ?? '';
+              final productId = state.pathParameters['productId'] ?? '';
               return ProductScreen(productId: productId);
             },
           ),
@@ -47,7 +47,7 @@ final goRouterProvider = Provider((ref) {
     ],
 
     redirect: (context, state) {
-      final isGoinTo = state.subloc;
+      final isGoinTo = state.fullPath;
       final authStatus = goRouterNotifier.authStatus;
       if (isGoinTo == '/splash' && authStatus == AuthStatus.checking) {
         return null;

@@ -1,4 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_teslo_app/config/constants/enviroment.dart';
 import 'package:flutter_teslo_app/features/products/domain/entities/product.dart';
 import 'package:flutter_teslo_app/features/products/products.dart';
@@ -141,6 +142,12 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
   void onTagsChanged(String tags) {
     state = state.copyWith(tags: tags);
   }
+
+  void updateProductImage(String imagePath) {
+    final updatedImages = [...state.images, imagePath];
+    state = state.copyWith(images: updatedImages);
+  }
+
 }
 
 //* ESTADO DEL FORMULARIO DE PRODUCTO

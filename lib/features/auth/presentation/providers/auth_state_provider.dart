@@ -1,4 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_teslo_app/features/auth/domain/domain.dart';
 import 'package:flutter_teslo_app/features/auth/infrastructure/infrastructure.dart';
 import '../../../shared/shared.dart';
@@ -20,9 +21,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.keyValueStorageService,
   }) : super(AuthState()) {
     checkAuthStatus();
-    if (state.authStatus == AuthStatus.authenticated) {
-      state = state.copyWith(errorMessage: null);
-    }
   }
 
   void loginUser(String email, String password) async {
@@ -67,7 +65,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       authStatus: AuthStatus.authenticated,
       user: user,
-      errorMessage: null,
+      errorMessage: '',
     );
   }
 
@@ -76,10 +74,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       authStatus: AuthStatus.notAuthenticated,
       user: null,
-      errorMessage: errorMessage,
+      errorMessage: errorMessage ?? '',
     );
-
-    print(state);
   }
 }
 
